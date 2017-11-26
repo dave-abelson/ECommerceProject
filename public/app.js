@@ -1,12 +1,15 @@
 const AddUser = document.querySelector('.AddUser')
 AddUser.addEventListener('submit', (e) => {
   e.preventDefault()
-  const username = AddUser.querySelector('.username').value
+  const firstname = AddUser.querySelector('.firstname').value
+  const lastname = AddUser.querySelector('.lastname').value
+  const email = AddUser.querySelector('.email').value
   const password = AddUser.querySelector('.password').value
-  post('addUser', {username, password})
+  post('addUser', {firstname, lastname, email, password})
 })
 
 function post (path, data) {
+  console.log(data)
   return window.fetch(path, {
     method: 'POST',
     headers: {

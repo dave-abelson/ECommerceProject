@@ -13,8 +13,10 @@ app.use(bodyParser.json())
 app.post('/addUser', (req, res) => {
   store
     .addUser({
-      username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
+      email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
     })
     .then(() => res.sendStatus(200))
 })
