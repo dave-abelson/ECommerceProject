@@ -21,6 +21,15 @@ app.post('/addUser', (req, res) => {
     .then(() => res.sendStatus(200))
 })
 
+app.post('/addItem', (req, res) => {
+  store.addItem({
+    name: req.body.name,
+    price: req.body.price,
+    category: req.body.category
+  })
+  .then(() => res.sendStatus(200))
+})
+
 app.listen(8000, () => {
   console.log('Server running on http://localhost:8000')
 })
