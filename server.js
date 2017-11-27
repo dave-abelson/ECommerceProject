@@ -4,11 +4,12 @@ var express = require('express')
 var bodyParser = require('body-parser')
 
 var store = require('./store')
-
+var authenticate = require('./routes/authenticate');
 var app = express()
 
 app.use(express.static('public'))
 app.use(bodyParser.json())
+app.use('/auth', authenticate);
 
 app.post('/addUser', (req, res) => {
   store

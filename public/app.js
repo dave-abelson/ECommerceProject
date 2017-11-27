@@ -5,7 +5,7 @@ AddUser.addEventListener('submit', (e) => {
   const lastname = AddUser.querySelector('.lastname').value
   const email = AddUser.querySelector('.email').value
   const password = AddUser.querySelector('.password').value
-  post('addUser', {firstname, lastname, email, password})
+  post('/auth/addUser', {firstname, lastname, email, password})
 })
 
 function post (path, data) {
