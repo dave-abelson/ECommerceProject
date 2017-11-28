@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
+var utils = require('../dbutils')
 
 var con = mysql.createConnection({
   host: "localhost",
@@ -11,18 +12,11 @@ var con = mysql.createConnection({
 
 router.route('/addUser')
   .post(function(req, res){
-    con.connect(function(err){
-      if(err) throw err;
-      console.log("Connected!");
-    });
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var emailAddress = req.body.email;
     var password = req.body.password;
-    var sql = "INSERT INTO Customer (FirstName, LastName, EmailAddress, Password) VALUES (?, ?, ?, ?)"
-    con.query(sql, [firstName, lastName, emailAddress, password], function (err, result) {
-      if (err) throw err;
-      console.log("1 customer inserted");
-    });
+    var row = {FirstName: firstName, LastName: lastName, EmailAddress: emailAddress, Password: password}
+    utils.insertRow('Customer', row)
   })
 module.exports = router;

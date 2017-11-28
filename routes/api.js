@@ -2,13 +2,6 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "cse305"
-});
-
 router.route('/addItem')
   .post(function(req, res){
     con.connect(function(err){
