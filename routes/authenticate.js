@@ -13,6 +13,17 @@ router.route('/addUser')
     utils.insertRow('Customer', row)
   })
 
+router.route('/allUsers')
+    .get(function(req, res){
+    	console.log('in all users')
+	var customers
+	utils.selectAll("Customer", function(result){
+	    customers = result
+	    console.log(customers)
+	    res.send(customers)
+	})
+    })
+
 router.route('/deleteUser')
     .post(function(req, res){
 	console.log("In delete user")

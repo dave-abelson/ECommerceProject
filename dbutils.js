@@ -2,6 +2,10 @@ var mysql = require('mysql')
 
 var connection;
 
+function dbutils(){
+
+}
+
 function getConnection(){
     if (connection == null){
     	connection = mysql.createConnection({
@@ -15,7 +19,7 @@ function getConnection(){
     return connection;
 }
 
-this.insertRow = function (tableName, row){
+dbutils.insertRow = function (tableName, row){
     var sql = "INSERT INTO " + tableName
     var values = "VALUES("
     var columns = "("
@@ -39,7 +43,7 @@ this.insertRow = function (tableName, row){
     getConnection().query(sql, insertVals, function (err, result) { if (err) throw err }) 
 }
 
-this.deleteRow = function (tableName, keyValPair) {
+dbutils.deleteRow = function (tableName, keyValPair) {
     var primaryKey
     var value
     for (key in keyValPair){
@@ -49,3 +53,15 @@ this.deleteRow = function (tableName, keyValPair) {
     var sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + "=?";
     getConnection().query(sql, value, function (err, result) { if (err) console.log("Unable to delete row")})
 }
+
+dbutils.selectAll = function (tableName, callback) {
+    var sql = "SELECT * FROM " + tableName 
+    console.log(sql)
+    var resultSet
+    getConnection().query(sql, function (err, result) { 
+        if (err) console.log(err)
+	else return callback(result)
+    })
+}
+
+module.exports = dbutils
