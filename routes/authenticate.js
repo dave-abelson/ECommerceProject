@@ -3,13 +3,6 @@ var router = express.Router();
 var mysql = require('mysql');
 var utils = require('../dbutils')
 
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "cse305"
-});
-
 router.route('/addUser')
   .post(function(req, res){
     var firstName = req.body.firstName;
@@ -19,4 +12,12 @@ router.route('/addUser')
     var row = {FirstName: firstName, LastName: lastName, EmailAddress: emailAddress, Password: password}
     utils.insertRow('Customer', row)
   })
+
+router.route('/deleteUser')
+    .post(function(req, res){
+	console.log("In delete user")
+	utils.deleteRow("Customer", req.body)
+	res.sendStatus(200)
+    })
+
 module.exports = router;

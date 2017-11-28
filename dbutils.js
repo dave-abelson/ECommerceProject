@@ -38,3 +38,14 @@ this.insertRow = function (tableName, row){
 	
     getConnection().query(sql, insertVals, function (err, result) { if (err) throw err }) 
 }
+
+this.deleteRow = function (tableName, keyValPair) {
+    var primaryKey
+    var value
+    for (key in keyValPair){
+        primaryKey = key
+	value = keyValPair[key]
+    }
+    var sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + "=?";
+    getConnection().query(sql, value, function (err, result) { if (err) console.log("Unable to delete row")})
+}
