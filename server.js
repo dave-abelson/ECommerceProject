@@ -2,14 +2,21 @@
 
 var express = require('express')
 var bodyParser = require('body-parser')
+var path = require('path');
 
+var index = require('./routes/index');
 var store = require('./store')
 var authenticate = require('./routes/authenticate');
 var app = express()
 
-app.use(express.static('public'))
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+
+//app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use('/auth', authenticate);
+app.use('/', index);
+app.use(express.static(__dirname + /public/));
 
 app.post('/addUser', (req, res) => {
   store
