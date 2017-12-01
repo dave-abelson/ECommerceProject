@@ -73,17 +73,20 @@ dbutils.execQuery = function(qry, callback) {
     })
 }
 
-dbutils.select = function(tableName, columnNames, whereClauses, callback) {
+dbutils.select = function(tableNames, columnNames, whereClauses, callback) {
     var sql = "SELECT "
     for (var i = 0; i < columnNames.length; i++){
         sql+= columnNames[i] + ", "
     }
 
-    sql = sql.slice(0,-1)
-    sql = sql.slice(0,-1)
-    sql += " FROM " + tableName + " "
+    sql = sql.slice(0,-2)
+    sql += " FROM " 
+    for (var i = 0; i < tableNames.length; i++){
+       sql += tableNames[i] 	
+    }
+
     if (whereClauses != undefined && whereClauses.length >= 1){
-    	sql += "WHERE "
+    	sql += " WHERE "
 	sql += whereClauses[0]
 	for(var i = 1; i < whereClauses.length; i++){
 	    sql += " AND " + whereClauses[i] 

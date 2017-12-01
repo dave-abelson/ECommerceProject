@@ -28,9 +28,10 @@ router.route('/testWhere')
     .get(function(req, res){
         console.log('in test where')
 	var results
+	var tableNames = ["Customer"]
 	var columnNames = ["FirstName", "LastName"]
 	var whereClauses = ["FirstName = 'dave'"]
-	utils.select("Customer", columnNames, whereClauses, function(result){
+	utils.select(tableNames, columnNames, whereClauses, function(result){
 	    results = result
 	    console.log(results)
 	    res.send(results)
