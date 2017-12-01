@@ -11,7 +11,7 @@ function getConnection(){
     	connection = mysql.createConnection({
 	     host: '127.0.0.1',
 	     user: 'root',
-	     password: '',
+	     password: '2016dc',
 	     database: 'cse305'
         });
     }
@@ -62,6 +62,39 @@ dbutils.selectAll = function (tableName, callback) {
         if (err) console.log(err)
 	else return callback(result)
     })
+}
+
+dbutils.execQuery = function(qry, callback) {
+    var sql = qry
+    var resultSet
+    getConnection().query(sql, function (err, result) {
+        if (err) console.log(err)
+	else return callback(result)
+    })
+}
+
+dbutils.select = function(tableName, columnNames, whereClauses, callback) {
+    var sql = "SELECT "
+    for (var i = 0; i < columnNames.length; i++){
+        sql+= columnNames[i] + ", "
+    }
+
+    sql = sql.slice(0,-1)
+    sql = sql.slice(0,-1)
+    sql += " FROM " + tableName + " "
+    if (whereClauses != undefined && whereClauses.length >= 1){
+    	sql += "WHERE "
+	sql += whereClauses[0]
+	for(var i = 1; i < whereClauses.length; i++){
+	    sql += " AND " + whereClauses[i] 
+	}
+    }
+
+    console.log("SQL " + sql)
+    getConnection().query(sql, function (err, result) {
+        if (err) console.log(err)
+	else return callback(result)
+    })    
 }
 
 module.exports = dbutils
