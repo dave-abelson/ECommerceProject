@@ -3,13 +3,6 @@ var router      = express.Router();
 var mysql = require('mysql');
 var utils = require('../dbutils')
 
-var con = mysql.createConnection({
-	host: '127.0.0.1',
-	user: 'root',
-	password: '',
-	database: 'cse305'
-});
-
 router.get('/', function(req, res, next){
         res.render('admin', {title: "E-Commerce Administration"});
 });
@@ -19,6 +12,10 @@ router.post('/addItem', function(req, res, next){
 	var name = req.body.name;
     	var price = req.body.price;
     	var category = req.body.category;
+	var quantity = req.body.quantity;
+	// If not in Item add to item
+	// if quantity > 0 add to inventory or update inventory count
+	
     	var row = {Name: name, Price: price, Category: category}
     	utils.insertRow('Item', row)	
 	return res.send({status: 'OK', name: name})
@@ -27,16 +24,28 @@ router.post('/addItem', function(req, res, next){
 router.post('/itemSearch', function(req, res, next){
 	console.log(req.body)
 	var query = req.body.name;
-	//result = utils.selectAll('Item')
-	con.connect(function(err) {
-		if (err) throw err;
-		con.query("SELECT * FROM Item", function (err, result) {
-    			if (err) throw err;
+	if(query == ''){
+		utils.selectAll('Item', function(result){
+                	console.log(result)
+                	return res.send({status: 'OK', result: result})
+        	});	
+	}else{
+		// Doesn't work	
+		utils.select(['Item'], ['*'], ['Name=' + query],function(result){
+			console.log(result)		
 			return res.send({status: 'OK', result: result})
-    			console.log(result);
 		});
-	});	
+	}
+});
 
-
+router.post('/userSearch', function(req, res, next){
+	console.log(req.body)
+	var query = req.body.firstName
+	if(query == ''){
+		utils.selectAll('Customer', function(result){
+			console.log(result)
+			return res.send({status: 'OK', result: result})
+		});
+	}
 });
 module.exports = router;
