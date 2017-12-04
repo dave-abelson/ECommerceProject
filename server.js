@@ -7,6 +7,7 @@ var path = require('path');
 var index = require('./routes/index');
 var store = require('./store')
 var admin = require('./routes/admin')
+var api = require('.routes/api')
 var authenticate = require('./routes/authenticate');
 var app = express()
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json())
 app.use('/auth', authenticate);
 app.use('/', index);
 app.use('/admin', admin)
+app.use('/api', api)
 app.use(express.static(__dirname + /public/));
 
 app.post('/addUser', (req, res) => {

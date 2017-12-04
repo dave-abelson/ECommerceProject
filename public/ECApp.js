@@ -1,11 +1,11 @@
-var app = angular.module('ECApp', ['ngRoute', 'ngResource']).run(function($rootScope) {
+var app = angular.module('ECApp' ['ngRoute', 'ngResource']).run(function($rootScope) {
 	$rootScope.authenticated = false;
 	$rootScope.current_user = '';
 
 	$rootScope.logout = function(){
-    	$http.get('auth/logout');
-    	$rootScope.authenticated = false;
-    	$rootScope.current_user = '';
+    		$http.get('auth/logout');
+    		$rootScope.authenticated = false;
+    		$rootScope.current_user = '';
 	};	
 });
 
@@ -62,7 +62,6 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
 	$scope.verify = function(){
 		$http.post('/auth/verify', $scope.user).success(function(data){
 			if(data.status == 'OK'){
-				console.log("HERE");
 				$rootScope.authenticated = true;
 				$rootScope.current_user = data.user.username;
 				$location.path('/');	
