@@ -1,0 +1,19 @@
+<form class="form-group" ng-submit="addItem()">
+	<h2>Add Item</h2>
+	<input type="name" ng-model="item.name" placeholder="Item Name" class="form-control"><br>
+	<input type="number" min="0.00" max="10000.00" step="0.01" ng-model="item.price" placeholder="Item Price" class="form-control"><br>
+	<input type="category" ng-model="item.category" placeholder="Item Category" class="form-control"><br>
+	<!--- <input type="quantity" ng-model=item.quantity placeholder="Item Quantity" class=form-control><br>
+	-->
+	<input type="submit" value="Add Item" class="btn btn-primary" />
+</form>
+
+<form class="form-group" ng-submit="itemSearch()">
+	<h2>Item Search</h2>
+	<input type="search" ng-model="query.name" placeholder="Item Name" class="form-control"><br>
+	<input type="submit" value="Search" class="btn btn-primary" />
+</form>
+
+<div ng-repeat="item in itemList">
+<p>{{item.Name}}     {{item.Price}}     {{item.Category}}</p>
+</div>
