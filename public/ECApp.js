@@ -35,7 +35,7 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
 		$http.post('/auth/login', $scope.user).success(function(data){
 			if(data.status == 'OK'){
 				$rootScope.authenticated = true;
-				$rootScope.current_user = data.user.username;
+				$rootScope.current_user = data.user.FirstName + data.user.LastName;
 				$location.path('/');
 			}else{
 				$scope.error_message = data.message;
@@ -49,7 +49,7 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
                 $http.post('/auth/addUser', $scope.user).success(function(data){
                         if(data.status == 'OK'){
 				$rootScope.authenticated = true;
-                                $rootScope.current_user = data.user.username;
+                                $rootScope.current_user = data.user.FirstName + data.user.LastName;
                                 $location.path('/');
                         }else{
                                 $scope.error_message = data.error;

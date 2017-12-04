@@ -30,7 +30,7 @@ router.post('/itemSearch', function(req, res, next){
                 	return res.send({status: 'OK', result: result})
         	});	
 	}else{
-		// Doesn't work	
+		query = '\'' + query + '\''
 		utils.select(['Item'], ['*'], ['Name=' + query],function(result){
 			console.log(result)		
 			return res.send({status: 'OK', result: result})
