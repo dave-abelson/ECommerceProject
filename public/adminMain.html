@@ -10,12 +10,12 @@
 
 <form class="form-group" ng-submit="itemSearch()">
 	<h2>Item Search</h2>
-	<input type="search" ng-model="itemQuery.name" placeholder="Item Name" class="form-control"><br>
+	<input type="search" ng-model="itemQuery.query" placeholder="Item Name" class="form-control"><br>
 	<input type="submit" value="Search" class="btn btn-primary" />
 </form>
 
 <div ng-repeat="item in itemList">
-<p>{{item.Name}}     {{item.Price}}     {{item.Category}}</p>
+<p>{{item.ID}}     {{item.Name}}     {{item.Price}}     {{item.Category}}</p>
 </div>
 
 <form class="form-group" ng-submit="userSearch()">
@@ -25,5 +25,5 @@
 </form>
 
 <div ng-repeat="user in userList">
-<p>{{user.FirstName}}     {{user.LastName}}</p>
+<p>{{user.ID}}     {{user.FirstName}}     {{user.LastName}}     {{user.EmailAddress}}</p>
 </div>

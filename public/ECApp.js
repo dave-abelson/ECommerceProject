@@ -58,6 +58,9 @@ app.controller('authController', function($scope, $http, $rootScope, $location, 
 				$location.path('/');
 			}else{
 				$scope.error_message = data.message;
+				$timeout(function(){
+                                        window.alert("User doesn\'t exist");
+                                });
 			}
 		
 		});

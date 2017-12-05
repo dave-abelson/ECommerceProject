@@ -36,9 +36,12 @@ router.route('/login')
         	var fillerVals = [email, password]
         	utils.select(tableNames, columnNames, whereClauses, fillerVals, function(result){
             	results = result
-            	console.log(results)
-		user = results[0]
-            	res.send({status: 'OK', user: user})
+		var user = results[0]
+		console.log(user)
+		if(user == undefined){
+			return res.send({status: 'ERROR', error_message: 'No User'})		
+		}
+            	return res.send({status: 'OK', user: user})
         })
 
 				

@@ -14,8 +14,8 @@ app.config(function($routeProvider, $locationProvider){
 });
 
 app.controller('inventoryController', function($scope, $http, $rootScope){
-	$scope.item = {name: '', price: '', category: '', quantity: ''};
-	$scope.itemQuery = {name: ''};
+	$scope.item = {id: '', name: '', price: '', category: '', quantity: ''};
+	$scope.itemQuery = {query: ''};
 	$scope.userQuery = {firstName: ''};
 	$scope.itemList = []; 
 	$scope.userList = [];
