@@ -22,10 +22,16 @@ router.post('/itemSearch', function(req, res, next){
                         return res.send({status: 'OK', result: result})
                 });
         }else{
-                query = '\'' + query + '\''
-                utils.select(['Item'], ['*'], ['Name=' + query],function(result){
-                        console.log(result)
-                        return res.send({status: 'OK', result: result})
+		console.log('HERE')
+		var results
+                var tableNames = ["Item"]
+                var columnNames = ['*']
+                var whereClauses = ["Name = ?"]
+                var fillerVals = [query]
+                utils.select(tableNames, columnNames, whereClauses, fillerVals, function(result){
+                	results = result
+                	console.log(result)
+                	return res.send({status: 'OK', result: result})
                 });
         }
 });

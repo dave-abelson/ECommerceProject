@@ -29,18 +29,24 @@ router.post('/addItem', function(req, res, next){
 
 router.post('/itemSearch', function(req, res, next){
 	console.log(req.body)
-	var query = req.body.name;
+	var query = req.body.query;
 	if(query == ''){
 		utils.selectAll('Item', function(result){
                 	console.log(result)
                 	return res.send({status: 'OK', result: result})
         	});	
 	}else{
-		query = '\'' + query + '\''
-		utils.select(['Item'], ['*'], ['Name=' + query],function(result){
-			console.log(result)		
-			return res.send({status: 'OK', result: result})
-		});
+		var results
+                var tableNames = ["Item"]
+                var columnNames = ['*']
+                var whereClauses = ["Name = ?"]
+                var fillerVals = [query]
+                utils.select(tableNames, columnNames, whereClauses, fillerVals, function(result){
+                	results = result
+                	console.log(result)
+                	return res.send({status: 'OK', result: result})
+                });
+
 	}
 });
 
