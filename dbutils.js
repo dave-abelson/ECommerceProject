@@ -11,12 +11,35 @@ function getConnection(){
     	connection = mysql.createConnection({
 	     host: '127.0.0.1',
 	     user: 'root',
-	     password: '',
+	     password: '2016dc',
 	     database: 'cse305'
         });
     }
 
     return connection;
+}
+
+dbutils.formatStringVars = function(objectArr){
+    for (var i = 0; i < objectArr.length; i++){
+    	if (typeof objectArr[i] === 'string'){
+	    objectArr[i] = formatStringVar(objectArr[i])
+	}
+    }
+}
+
+dbutils.formatStringVar = function(string){
+    return '\'' + string + '\''
+}
+
+dbutils.doesExist = function(tableName, columnName, keyVal){
+    var whereClause = [columnName + " = " + keyVal]
+    dbutils.select(tableName, ['*'], whereClause, function(result) {
+        if (result.length > 0){
+	    console.log("Row does not exist in table " + tableName)
+	    return true;
+	}
+	return false;
+    })
 }
 
 dbutils.insertRow = function (tableName, row){
@@ -98,6 +121,29 @@ dbutils.select = function(tableNames, columnNames, whereClauses, callback) {
         if (err) console.log(err)
 	else return callback(result)
     })    
+}
+
+//Column names is an array of column names
+//newVals is an array of values to set to the corresponding column name
+//whereClause is a single string that is WHERE primary_key = some_id
+//callback is your callback function
+//String vars must be wrapped in single quotes.
+dbutils.update = function(tableName, columnNames, newVals, whereClause){
+    if (columnNames.length != newVals.length){
+	    console.log("ERROR: COLUMN NAMES NOT EQUAL TO NEW VAL LENGTH")
+	    return;
+    }
+
+    var sql = "UPDATE " + tableName + " SET "
+    for (var i = 0; i < columnNames.length; i++){
+       sql += columnNames[i] + " = " + newVals[i] + ' ' 	
+    }
+    sql = sql.slice(0, -1)
+    sql += " WHERE " + whereClause
+    console.log("SQL Query: " + sql)
+    getConnection().query(sql, function(err, result) {
+        if (err) console.log(err)
+    }) 
 }
 
 module.exports = dbutils
