@@ -15,10 +15,17 @@ router.post('/addItem', function(req, res, next){
 	var quantity = req.body.quantity;
 	// If not in Item add to item
 	// if quantity > 0 add to inventory or update inventory count
-	
-    	var row = {Name: name, Price: price, Category: category}
-    	utils.insertRow('Item', row)	
-	return res.send({status: 'OK', name: name})
+        
+        utils.select('Item', ['*'], ['Name = \'' + name + '\''], function(result){
+		if (!result){	
+			console.log("Inserting New Item")
+			var row = {Name: name, Price: price, Category: category}
+    	     		utils.insertRow('Item', row)	
+			return res.send({status: 'OK', name: name})
+		}else{
+			console.log("ITEM ALREADY EXISTS")
+		}
+	})
 });
 
 router.post('/itemSearch', function(req, res, next){
