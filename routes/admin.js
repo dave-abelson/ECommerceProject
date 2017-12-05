@@ -14,10 +14,9 @@ router.post('/addItem', function(req, res, next){
     	var category = req.body.category;
 	var quantity = req.body.quantity;
 	// If not in Item add to item
-	// if quantity > 0 add to inventory or update inventory count
-        
-        utils.select('Item', ['*'], ['Name = \'' + name + '\''], function(result){
-		if (!result){	
+	// if quantity > 0 add to inventory or update inventory count        
+        utils.select('Item', ['*'], ['Name = ?'], [name], function(result){
+		if (result.length == 0){	
 			console.log("Inserting New Item")
 			var row = {Name: name, Price: price, Category: category}
     	     		utils.insertRow('Item', row)	

@@ -30,7 +30,8 @@ router.route('/testWhere')
 	var results
 	var tableNames = ["Customer"]
 	var columnNames = ["FirstName", "LastName"]
-	var whereClauses = ["FirstName = 'dave'"]
+	var whereClauses = ["FirstName = ?"]
+	var fillerVals = ['dave']
 	utils.select(tableNames, columnNames, whereClauses, function(result){
 	    results = result
 	    console.log(results)

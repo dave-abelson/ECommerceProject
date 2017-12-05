@@ -96,7 +96,11 @@ dbutils.execQuery = function(qry, callback) {
     })
 }
 
-dbutils.select = function(tableNames, columnNames, whereClauses, callback) {
+dbutils.select = function(tableNames, columnNames, whereClauses, fillerVals, callback) {
+    if (fillerVals === undefined){
+    	fillerVals = []
+    }
+
     var sql = "SELECT "
     for (var i = 0; i < columnNames.length; i++){
         sql+= columnNames[i] + ", "
@@ -117,7 +121,7 @@ dbutils.select = function(tableNames, columnNames, whereClauses, callback) {
     }
 
     console.log("SQL " + sql)
-    getConnection().query(sql, function (err, result) {
+    getConnection().query(sql, fillerVals, function (err, result) {
         if (err) console.log(err)
 	else return callback(result)
     })    
@@ -127,8 +131,9 @@ dbutils.select = function(tableNames, columnNames, whereClauses, callback) {
 //newVals is an array of values to set to the corresponding column name
 //whereClause is a single string that is WHERE primary_key = some_id
 //callback is your callback function
+//filler is what should fill the '?' character in the where clause
 //String vars must be wrapped in single quotes.
-dbutils.update = function(tableName, columnNames, newVals, whereClause){
+dbutils.update = function(tableName, columnNames, newVals, whereClause, filler){
     if (columnNames.length != newVals.length){
 	    console.log("ERROR: COLUMN NAMES NOT EQUAL TO NEW VAL LENGTH")
 	    return;
@@ -141,7 +146,7 @@ dbutils.update = function(tableName, columnNames, newVals, whereClause){
     sql = sql.slice(0, -1)
     sql += " WHERE " + whereClause
     console.log("SQL Query: " + sql)
-    getConnection().query(sql, function(err, result) {
+    getConnection().query(sql, filler, function(err, result) {
         if (err) console.log(err)
     }) 
 }
