@@ -7,7 +7,7 @@ var path = require('path');
 var index = require('./routes/index');
 var store = require('./store')
 var admin = require('./routes/admin')
-var api = require('.routes/api')
+var api = require('./routes/api')
 var authenticate = require('./routes/authenticate');
 var app = express()
 
