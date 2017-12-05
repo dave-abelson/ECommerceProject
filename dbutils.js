@@ -11,7 +11,7 @@ function getConnection(){
     	connection = mysql.createConnection({
 	     host: '127.0.0.1',
 	     user: 'root',
-	     password: '2016dc',
+	     password: '',
 	     database: 'cse305'
         });
     }
