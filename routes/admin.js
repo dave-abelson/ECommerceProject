@@ -12,9 +12,6 @@ router.post('/addItem', function(req, res, next){
 	var name = req.body.name;
     	var price = req.body.price;
     	var category = req.body.category;
-	var quantity = req.body.quantity;
-	// If not in Item add to item
-	// if quantity > 0 add to inventory or update inventory count        
         utils.select('Item', ['*'], ['Name = ?'], [name], function(result){
 		if (result.length == 0){	
 			console.log("Inserting New Item")
@@ -50,6 +47,36 @@ router.post('/itemSearch', function(req, res, next){
 	}
 });
 
+router.post('/updateInventory', function(req, res, next){
+	console.log(req.body)
+	var id = req.body.id
+	var quantity = req.body.quantity	
+	
+	// first check if item is in the inventory
+	// if it exists update count with new quantity
+	// if it doesn't exist, enter it into the inventory with ID and Quantity
+	utils.select('Inventory', ['*'], ['ItemID = ?'], [id], function(result){
+                if (result.length == 0){
+                        console.log("Inserting Item ID")
+                        var row = {ItemQuantity: quantity, ItemID: id}
+                        utils.insertRow('Inventory', row)
+                        return res.send({status: 'OK'})
+                }else{
+			console.log("Updating Inventory")
+			var current = result[0].ItemQuantity
+			newValue = current + quantity
+			var tableName = 'Inventory'
+			var columnNames = ['ItemQuantity']
+			var newVals = [newValue]
+			var whereClause = 'ItemID = ?'
+			var filler = id
+			utils.update(tableName, columnNames, newVals, whereClause, filler)
+			return res.send({status: 'OK'})
+                }
+        })
+	
+});
+
 router.post('/userSearch', function(req, res, next){
 	console.log(req.body)
 	var query = req.body.firstName
@@ -58,6 +85,18 @@ router.post('/userSearch', function(req, res, next){
 			console.log(result)
 			return res.send({status: 'OK', result: result})
 		});
-	}
+	} else{
+                var results
+                var tableNames = ["Customer"]
+                var columnNames = ['*']
+                var whereClauses = ["FirstName = ?"]
+                var fillerVals = [query]
+                utils.select(tableNames, columnNames, whereClauses, fillerVals, function(result){
+                        results = result
+                        console.log(result)
+                        return res.send({status: 'OK', result: result})
+                });
+
+        }
 });
 module.exports = router;

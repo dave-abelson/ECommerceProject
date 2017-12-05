@@ -4,11 +4,17 @@
 	<input type="number" min="0.00" max="10000.00" step="0.01" ng-model="item.price" placeholder="Item Price" class="form-control"><br>
 	<!--- Need to add set of categories -->
 	<input type="category" ng-model="item.category" placeholder="Item Category" class="form-control"><br>
-	<input type="number" ng-model=item.quantity placeholder="Item Quantity" class=form-control><br>
 	<input type="submit" value="Add Item" class="btn btn-primary" />
 </form>
 
-<form class="form-group" ng-submit="itemSearch()">
+<form class="form-group" name="updateInventoryForm" ng-submit="updateInventory()">
+        <h2>Update Inventory</h2>
+        <input type="number" ng-model="inventory.id" placeholder="Item ID" class="form-control"><br>
+        <input type="number" ng-model="inventory.quantity" placeholder="Item Quantity" class="form-control"><br>
+        <input type="submit" value="Update" class="btn btn-primary" />
+</form>
+
+<form class="form-group" name="itemSearchForm" ng-submit="itemSearch()">
 	<h2>Item Search</h2>
 	<input type="search" ng-model="itemQuery.query" placeholder="Item Name" class="form-control"><br>
 	<input type="submit" value="Search" class="btn btn-primary" />
@@ -18,9 +24,9 @@
 <p>{{item.ID}}     {{item.Name}}     {{item.Price}}     {{item.Category}}</p>
 </div>
 
-<form class="form-group" ng-submit="userSearch()">
+<form class="form-group" name="userSearchForm" ng-submit="userSearch()">
         <h2>User Search</h2>
-        <input type="search" ng-model="userQuery.name" placeholder="User Name" class="form-control"><br>
+        <input type="search" ng-model="userQuery.firstName" placeholder="User Name" class="form-control"><br>
         <input type="submit" value="Search" class="btn btn-primary" />
 </form>
 

@@ -14,11 +14,12 @@ app.config(function($routeProvider, $locationProvider){
 });
 
 app.controller('inventoryController', function($scope, $http, $rootScope){
-	$scope.item = {id: '', name: '', price: '', category: '', quantity: ''};
+	$scope.item = {id: '', name: '', price: '', category: ''};
 	$scope.itemQuery = {query: ''};
 	$scope.userQuery = {firstName: ''};
 	$scope.itemList = []; 
 	$scope.userList = [];
+	$scope.inventory = {id: '', quantity: ''}
 	$scope.error_message = '';
 
 	$scope.addItem = function(){
@@ -33,11 +34,24 @@ app.controller('inventoryController', function($scope, $http, $rootScope){
 		});
 	};
 
+	$scope.updateInventory = function(){
+		$http.post('/admin/updateInventory', $scope.inventory).success(function(data){
+			if(data.status == 'OK'){
+				console.log('Inventory Updated!')
+				$scope.inventory = {}
+				$scope.updateInventoryForm.$setPristine(true)
+			} else {
+				$scope.error_message = data.error
+			}
+		});
+	};
+
 	$scope.itemSearch = function(){
 		$http.post('/admin/itemSearch', $scope.itemQuery).success(function(data){
 			if(data.status == 'OK'){
 				console.log('Search Complete')
 				$scope.itemList = data.result
+				$scope.itemSearchForm.$setPristine(true);
 			} else {
 				$scope.error_message = data.error
 			}
@@ -49,6 +63,7 @@ app.controller('inventoryController', function($scope, $http, $rootScope){
                         if(data.status == 'OK'){
                                 console.log('Search Complete')
                                 $scope.userList = data.result
+				$scope.userSearchForm.$setPristine(true);
                         } else {
                                 $scope.error_message = data.error
                         }
