@@ -4,14 +4,44 @@ var mysql = require('mysql');
 var utils = require('../dbutils')
 
 router.route('/addUser')
-  .post(function(req, res){
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var emailAddress = req.body.email;
-    var password = req.body.password;
-    var row = {FirstName: firstName, LastName: lastName, EmailAddress: emailAddress, Password: password}
-    utils.insertRow('Customer', row)
-  })
+	.post(function(req, res){
+		var firstName = req.body.firstName;
+		var lastName = req.body.lastName;
+		var emailAddress = req.body.email;
+		var password = req.body.password;
+
+		utils.select('Customer', ['*'], ['EmailAddress = ?'], [emailAddress], function(result){
+        	        if (result.length == 0){
+                	        console.log("Inserting New Customer")
+				var row = {FirstName: firstName, LastName: lastName, EmailAddress: emailAddress, Password: password}
+                		utils.insertRow('Customer', row)
+                		return res.send({status: 'OK', user: row})
+                	}else{
+                        	console.log("EMAIL ALREADY EXISTS")
+				return res.send({status: 'ERROR', error_message: "Email already exists"})
+                	}
+	        })
+
+	})
+
+router.route('/login')
+	.post(function(req, res){
+		var email = req.body.email
+		var password = req.body.password
+		
+		var results
+	        var tableNames = ["Customer"]
+       		var columnNames = ['*']
+        	var whereClauses = ["EmailAddress = ?", "Password = ?"]
+        	var fillerVals = [email, password]
+        	utils.select(tableNames, columnNames, whereClauses, fillerVals, function(result){
+            	results = result
+            	console.log(results)
+            	res.send({status: 'OK', result: results})
+        })
+
+				
+	});
 
 router.route('/allUsers')
     .get(function(req, res){
@@ -46,4 +76,9 @@ router.route('/deleteUser')
 	res.sendStatus(200)
     })
 
+router.route('/logout')
+	.get(function(req, res){
+		console.log("Logging out")
+		return res.send({status: 'OK'})
+	});
 module.exports = router;

@@ -1,4 +1,4 @@
-var app = angular.module('ECApp' ['ngRoute', 'ngResource']).run(function($rootScope) {
+var app = angular.module('ECApp', ['ngRoute', 'ngResource']).run(function($rootScope, $http) {
 	$rootScope.authenticated = false;
 	$rootScope.current_user = '';
 
@@ -25,9 +25,15 @@ app.config(function($routeProvider, $locationProvider){
                         controller: 'authController'
                 });
 	$locationProvider.html5Mode(true);
+});
+
+app.controller('mainController', function($scope, $http, $rootScope, $location){
+	$scope.error_message = '';
+
+	
 });	
 
-app.controller('authController', function($scope, $http, $rootScope, $location){
+app.controller('authController', function($scope, $http, $rootScope, $location, $timeout){
 	$scope.user = {firstName: '', lastName: '', email: '', password: ''};
 	$scope.error_message = '';
 	
@@ -49,10 +55,13 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
                 $http.post('/auth/addUser', $scope.user).success(function(data){
                         if(data.status == 'OK'){
 				$rootScope.authenticated = true;
-                                $rootScope.current_user = data.user.FirstName + data.user.LastName;
+                                $rootScope.current_user = data.firstName + " " + data.lastName;
                                 $location.path('/');
                         }else{
                                 $scope.error_message = data.error;
+				$timeout(function(){
+					window.alert("Email already exists");
+				});
                         }
 
                 });
