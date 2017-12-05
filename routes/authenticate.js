@@ -37,7 +37,8 @@ router.route('/login')
         	utils.select(tableNames, columnNames, whereClauses, fillerVals, function(result){
             	results = result
             	console.log(results)
-            	res.send({status: 'OK', result: results})
+		user = results[0]
+            	res.send({status: 'OK', user: user})
         })
 
 				
