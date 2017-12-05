@@ -29,7 +29,20 @@ app.config(function($routeProvider, $locationProvider){
 
 app.controller('mainController', function($scope, $http, $rootScope, $location){
 	$scope.error_message = '';
-
+	$scope.item = {name: '', price: '', category: '', quantity: ''};
+        $scope.itemQuery = {query: ''};
+	$scope.itemList = [];	
+	
+	$scope.itemSearch = function(){
+                $http.post('/api/itemSearch', $scope.itemQuery).success(function(data){
+                        if(data.status == 'OK'){
+                                console.log('Search Complete')
+                                $scope.itemList = data.result
+                        } else {
+                                $scope.error_message = data.error
+                        }
+                });
+        };
 	
 });	
 

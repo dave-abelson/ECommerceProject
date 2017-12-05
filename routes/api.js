@@ -13,5 +13,22 @@ router.post('/updateInventory', function(req, res, next) {
     console.log("Called update")
 })
 
+router.post('/itemSearch', function(req, res, next){
+        console.log(req.body)
+        var query = req.body.query;
+        if(query == ''){
+                utils.selectAll('Item', function(result){
+                        console.log(result)
+                        return res.send({status: 'OK', result: result})
+                });
+        }else{
+                query = '\'' + query + '\''
+                utils.select(['Item'], ['*'], ['Name=' + query],function(result){
+                        console.log(result)
+                        return res.send({status: 'OK', result: result})
+                });
+        }
+});
+
 module.exports = router;
 
