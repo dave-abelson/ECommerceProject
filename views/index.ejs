@@ -20,7 +20,7 @@
                                 <p class="navbar-right navbar-text"ng-hide="authenticated"><a href="/login">Login</a> <a href="/addUser">Register</a>
 			
 				<p class="navbar-right navbar-text" ng-show="authenticated"><a href="#" ng-click="logout()">Logout</a></p>
-		   		<p class="navbar-right navbar-text" ng-show="authenticated">Signed in as {{current_user}}</p>
+		   		<p class="navbar-right navbar-text" ng-show="authenticated">Signed in as {{current_user.FirstName}}</p>
 				<p class="navbar-right navbar-text" ng-show="authenticated"><a href="#">Shopping Cart</a></p>
                         </div>
                 </nav>

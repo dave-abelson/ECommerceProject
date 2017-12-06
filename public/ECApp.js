@@ -1,11 +1,11 @@
 var app = angular.module('ECApp', ['ngRoute', 'ngResource']).run(function($rootScope, $http) {
 	$rootScope.authenticated = false;
-	$rootScope.current_user = '';
+	$rootScope.current_user = {};
 
 	$rootScope.logout = function(){
     		$http.get('auth/logout');
     		$rootScope.authenticated = false;
-    		$rootScope.current_user = '';
+    		$rootScope.current_user = {};
 	};	
 });
 
@@ -29,9 +29,10 @@ app.config(function($routeProvider, $locationProvider){
 
 app.controller('mainController', function($scope, $http, $rootScope, $location){
 	$scope.error_message = '';
-	$scope.item = {name: '', price: '', category: '', quantity: ''};
+	$scope.item = {id: '', name: '', price: '', category: '', quantity: ''};
         $scope.itemQuery = {query: ''};
 	$scope.itemList = [];	
+
 	
 	$scope.itemSearch = function(){
                 $http.post('/api/itemSearch', $scope.itemQuery).success(function(data){
@@ -44,6 +45,16 @@ app.controller('mainController', function($scope, $http, $rootScope, $location){
                 });
         };
 	
+	$scope.addToShoppingCart = function(item){
+		$http.post('/api/addToShoppingCart', {item: item, user: $rootScope.current_user}).success(function(data){
+			if(data.status == 'OK'){
+				console.log('Added Item To Shopping Cart')
+			} else {
+				$scope.error_message = data.error
+			}
+		});	
+	};
+	
 });	
 
 app.controller('authController', function($scope, $http, $rootScope, $location, $timeout){
@@ -54,7 +65,7 @@ app.controller('authController', function($scope, $http, $rootScope, $location, 
 		$http.post('/auth/login', $scope.user).success(function(data){
 			if(data.status == 'OK'){
 				$rootScope.authenticated = true;
-				$rootScope.current_user = data.user.FirstName + " " + data.user.LastName;
+				$rootScope.current_user = data.user;
 				$location.path('/');
 			}else{
 				$scope.error_message = data.message;
@@ -71,7 +82,7 @@ app.controller('authController', function($scope, $http, $rootScope, $location, 
                 $http.post('/auth/addUser', $scope.user).success(function(data){
                         if(data.status == 'OK'){
 				$rootScope.authenticated = true;
-                                $rootScope.current_user = data.user.FirstName + " " + data.user.LastName;
+                                $rootScope.current_user = data.user;
                                 $location.path('/');
                         }else{
                                 $scope.error_message = data.error;
