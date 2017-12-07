@@ -13,6 +13,39 @@ router.post('/updateInventory', function(req, res, next) {
     console.log("Called update")
 })
 
+router.post('/displayShoppingCart', function(req, res, next){
+	var con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "",
+		database: "cse305"
+	});
+
+	con.connect(function(err) {
+  		if (err) throw err;
+  		var sql = "SELECT Item.Name, Item.price, ShoppingCart.ItemQuantity FROM Item INNER JOIN ShoppingCart ON Item.ID = ShoppingCart.ItemID";
+  		con.query(sql, function (err, result) {
+    		if (err) throw err;
+    		console.log(result);
+		return res.send({status: 'OK', result: result})
+  	});
+});
+	var customerID = req.body.user.ID
+	var tableNames = ["ShoppingCart"]
+	var columnNames = ['ItemID', 'ItemQuantity']
+	var whereClauses = ["CustomerID = ?"]
+	var fillerVals = [customerID]
+	var shoppingCart = []
+	var returnARR = []
+	utils.select(tableNames, columnNames, whereClauses, fillerVals, function(result){
+		for(var i=0; i < result.length; i++){
+			console.log(result[i])
+		}
+	})
+
+	
+})
+
 router.post('/addToShoppingCart', function(req, res, next){
 	console.log(req.body)
 	var itemID = req.body.item.ID
@@ -33,7 +66,6 @@ router.post('/addToShoppingCart', function(req, res, next){
 			for(var i = 0; i < result.length; i++) {
 				current = result[i]
 				if(current.ItemID == itemID){
-					console.log('HERE')
                         		newValue = current.ItemQuantity + quantity
                         		var tableName = 'ShoppingCart'
                         		var columnNames = ['ItemQuantity']
@@ -50,15 +82,7 @@ router.post('/addToShoppingCart', function(req, res, next){
                         console.log(row)
                         utils.insertRow('ShoppingCart', row)
                         return res.send({status: 'OK'})
-                        //newValue = current + quantity
-                        //var tableName = 'Inventory'
-                        //var columnNames = ['ItemQuantity']
-                        //var newVals = [newValue]
-                        //var whereClause = 'ItemID = ?'
-                        //var filler = id
-                        //utils.update(tableName, columnNames, newVals, whereClause, filler)
-                        //return res.send({status: 'OK'})
-                }
+              } 
         })
 
 });

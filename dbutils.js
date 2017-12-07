@@ -127,6 +127,36 @@ dbutils.select = function(tableNames, columnNames, whereClauses, fillerVals, cal
     })    
 }
 
+dbutils.selectOR = function(tableNames, columnNames, whereClauses, fillerVals, callback) {
+    if (fillerVals === undefined){
+        fillerVals = []
+    }
+
+    var sql = "SELECT "
+    for (var i = 0; i < columnNames.length; i++){
+        sql+= columnNames[i] + ", "
+    }
+
+    sql = sql.slice(0,-2)
+    sql += " FROM "
+    for (var i = 0; i < tableNames.length; i++){
+       sql += tableNames[i]
+    }
+
+    if (whereClauses != undefined && whereClauses.length >= 1){
+        sql += " WHERE "
+        sql += whereClauses[0]
+        for(var i = 1; i < whereClauses.length; i++){
+            sql += " OR " + whereClauses[i]
+        }
+    }
+
+    console.log("SQL " + sql)
+    getConnection().query(sql, fillerVals, function (err, result) {
+        if (err) console.log(err)
+        else return callback(result)
+    })
+}
 //Column names is an array of column names
 //newVals is an array of values to set to the corresponding column name
 //whereClause is a single string that is WHERE primary_key = some_id

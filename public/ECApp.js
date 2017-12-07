@@ -23,7 +23,11 @@ app.config(function($routeProvider, $locationProvider){
 		.when('/addUser',{
                         templateUrl: 'addUser.html',
                         controller: 'authController'
-                });
+                })
+		.when('/shoppingCart',{
+			templateUrl: 'shoppingCart.html',
+			controller: 'shopController'
+		});
 	$locationProvider.html5Mode(true);
 });
 
@@ -56,6 +60,26 @@ app.controller('mainController', function($scope, $http, $rootScope, $location){
 	};
 	
 });	
+
+app.controller('shopController', function($scope, $http, $rootScope, $location){
+	$scope.error_message = '';
+	$scope.shoppingCart = []
+	$scope.quantityList = []
+	var result = []
+	$scope.displayShoppingCart = function(){
+		$http.post('/api/displayShoppingCart', {user: $rootScope.current_user}).success(function(data){
+			if(data.status == 'OK'){
+				console.log('Displayed Shopping Cart Items')		
+				console.log(data.result)
+				$scope.shoppingCart = data.result
+			} else {
+				$scope.error_message = data.error
+			}
+		});
+	}
+	
+	$scope.displayShoppingCart()
+});
 
 app.controller('authController', function($scope, $http, $rootScope, $location, $timeout){
 	$scope.user = {firstName: '', lastName: '', email: '', password: ''};
@@ -95,15 +119,4 @@ app.controller('authController', function($scope, $http, $rootScope, $location, 
 
         };
 
-	$scope.verify = function(){
-		$http.post('/auth/verify', $scope.user).success(function(data){
-			if(data.status == 'OK'){
-				$rootScope.authenticated = true;
-				$rootScope.current_user = data.user.username;
-				$location.path('/');	
-			}else{
-				$scope.error_message = data.error;
-			}
-		});
-	};
 });
