@@ -20,10 +20,10 @@ router.post('/displayShoppingCart', function(req, res, next){
 		password: "",
 		database: "cse305"
 	});
-
+	console.log(req.body.user.ID)
 	con.connect(function(err) {
   		if (err) throw err;
-  		var sql = "SELECT Item.Name, Item.price, ShoppingCart.ItemQuantity FROM Item INNER JOIN ShoppingCart ON Item.ID = ShoppingCart.ItemID";
+  		var sql = "SELECT Item.Name, Item.price, ShoppingCart.ItemQuantity FROM Item INNER JOIN ShoppingCart ON Item.ID = ShoppingCart.ItemID AND ShoppingCart.CustomerID = " + mysql.escape(req.body.user.ID);
   		con.query(sql, function (err, result) {
     		if (err) throw err;
     		console.log(result);

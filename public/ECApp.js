@@ -70,7 +70,6 @@ app.controller('shopController', function($scope, $http, $rootScope, $location){
 		$http.post('/api/displayShoppingCart', {user: $rootScope.current_user}).success(function(data){
 			if(data.status == 'OK'){
 				console.log('Displayed Shopping Cart Items')		
-				console.log(data.result)
 				$scope.shoppingCart = data.result
 			} else {
 				$scope.error_message = data.error
