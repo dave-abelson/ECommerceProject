@@ -72,7 +72,7 @@ app.controller('shopController', function($scope, $http, $rootScope, $location){
 			if(data.status == 'OK'){
 				console.log('Displayed Shopping Cart Items')		
 				for(var i=0; i < data.result.length; i++){
-					$scope.totalPrice += data.result[i].price
+					$scope.totalPrice += data.result[i].price * data.result[i].ItemQuantity
 				}
 				$scope.shoppingCart = data.result
 			} else {
@@ -110,7 +110,7 @@ app.controller('authController', function($scope, $http, $rootScope, $location, 
                         if(data.status == 'OK'){
 				$rootScope.authenticated = true;
                                 $rootScope.current_user = data.user;
-                                $location.path('/');
+                                $location.path('/login');
                         }else{
                                 $scope.error_message = data.error;
 				$timeout(function(){

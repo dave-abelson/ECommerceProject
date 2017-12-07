@@ -49,9 +49,8 @@ router.post('/displayShoppingCart', function(req, res, next){
 router.post('/addToShoppingCart', function(req, res, next){
 	console.log(req.body)
 	var itemID = req.body.item.ID
-	var customerID = req.body.user.ID
 	var quantity = 1
-	
+	var customerID = req.body.user.ID
 	utils.select('ShoppingCart', ['*'], ['CustomerID = ?'], [customerID], function(result){
                 if (result.length == 0){
                         console.log("Creating New Shopping Cart")
