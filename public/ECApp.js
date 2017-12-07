@@ -65,11 +65,15 @@ app.controller('shopController', function($scope, $http, $rootScope, $location){
 	$scope.error_message = '';
 	$scope.shoppingCart = []
 	$scope.quantityList = []
+	$scope.totalPrice = 0
 	var result = []
 	$scope.displayShoppingCart = function(){
 		$http.post('/api/displayShoppingCart', {user: $rootScope.current_user}).success(function(data){
 			if(data.status == 'OK'){
 				console.log('Displayed Shopping Cart Items')		
+				for(var i=0; i < data.result.length; i++){
+					$scope.totalPrice += data.result[i].price
+				}
 				$scope.shoppingCart = data.result
 			} else {
 				$scope.error_message = data.error
