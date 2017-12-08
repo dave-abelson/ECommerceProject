@@ -59,7 +59,7 @@ router.post('/displayShoppingCart', function(req, res, next){
 	console.log(req.body.user.ID)
 	con.connect(function(err) {
   		if (err) throw err;
-  		var sql = "SELECT Item.Name, Item.price, ShoppingCart.ItemQuantity FROM Item INNER JOIN ShoppingCart ON Item.ID = ShoppingCart.ItemID AND ShoppingCart.CustomerID = " + mysql.escape(req.body.user.ID);
+  		var sql = "SELECT Item.ID, Item.Name, Item.price, ShoppingCart.ItemQuantity FROM Item INNER JOIN ShoppingCart ON Item.ID = ShoppingCart.ItemID AND ShoppingCart.CustomerID = " + mysql.escape(req.body.user.ID);
   		con.query(sql, function (err, result) {
     		if (err) throw err;
     		console.log(result);
@@ -81,6 +81,47 @@ router.post('/displayShoppingCart', function(req, res, next){
 
 	
 })
+
+router.post('/incrementSCItem', function(req, res, next){
+	var customerID = req.body.user.ID
+	var itemID = req.body.itemID
+	utils.select('ShoppingCart', ['*'], ['CustomerID = ?', 'ItemID = ?'], [customerID, itemID], function(result){
+		// find the item with the userID and itemID
+		newValue = result[0].ItemQuantity + 1
+		var tableName = 'ShoppingCart'
+                var columnNames = ['ItemQuantity']
+                var newVals = [newValue]
+                var whereClause = 'ShoppingCartID = ?'
+                var filler = result[0].ShoppingCartID
+                utils.update(tableName, columnNames, newVals, whereClause, filler)
+                return res.send({status: 'OK'})
+	
+	})	
+})
+
+router.post('/decrementSCItem', function(req, res, next){
+	var customerID = req.body.user.ID
+        var itemID = req.body.itemID 
+        utils.select('ShoppingCart', ['*'], ['CustomerID = ?', 'ItemID = ?'], [customerID, itemID], function(result){
+                // find the item with the userID and itemID
+                newValue = result[0].ItemQuantity - 1
+		console.log(newValue)
+		if(newValue == 0){
+			console.log('DELETING ROW')
+			utils.deleteRow('ShoppingCart',{'ShoppingCartID': result[0].ShoppingCartID})	
+			return res.send({status: 'OK'})
+		}
+                var tableName = 'ShoppingCart'
+                var columnNames = ['ItemQuantity']
+                var newVals = [newValue]
+                var whereClause = 'ShoppingCartID = ?'
+                var filler = result[0].ShoppingCartID
+                utils.update(tableName, columnNames, newVals, whereClause, filler)
+                return res.send({status: 'OK'})
+        
+        })
+})
+
 
 router.post('/addToShoppingCart', function(req, res, next){
 	console.log(req.body)

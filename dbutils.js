@@ -74,6 +74,8 @@ dbutils.deleteRow = function (tableName, keyValPair) {
 	value = keyValPair[key]
     }
     var sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + "=?";
+    console.log("DELETING")
+    console.log(sql)
     getConnection().query(sql, value, function (err, result) { if (err) console.log("Unable to delete row")})
 }
 

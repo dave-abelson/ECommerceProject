@@ -106,6 +106,43 @@ app.controller('shopController', function($scope, $http, $rootScope, $location){
 			}
 		});
 	}
+
+	$scope.incrementQuantity = function(id){
+		$http.post('/api/incrementSCItem', {user: $rootScope.current_user, itemID: id}).success(function(data){
+			if(data.status == 'OK'){
+				for(var i=0; i < $scope.shoppingCart.length; i++){
+					if(id == $scope.shoppingCart[i].ID){
+						$scope.shoppingCart[i].ItemQuantity = $scope.shoppingCart[i].ItemQuantity + 1
+						$rootScope.totalPrice = $rootScope.totalPrice + $scope.shoppingCart[i].price
+					}
+				}
+                        } else {
+                                $scope.error_message = data.error
+                        }
+
+		});
+	}
+
+	$scope.decrementQuantity = function(id){
+		$http.post('/api/decrementSCItem', {user: $rootScope.current_user, itemID: id}).success(function(data){
+                        if(data.status == 'OK'){
+                                for(var i=0; i < $scope.shoppingCart.length; i++){
+                                        if(id == $scope.shoppingCart[i].ID){
+						if($scope.shoppingCart[i].ItemQuantity > 1){
+                                                	$scope.shoppingCart[i].ItemQuantity = $scope.shoppingCart[i].ItemQuantity - 1
+							$rootScope.totalPrice = $rootScope.totalPrice - $scope.shoppingCart[i].price
+						} else {
+							$rootScope.totalPrice = $rootScope.totalPrice - $scope.shoppingCart[i].price
+							$scope.shoppingCart.splice(i, 1);
+						}
+                                        }
+                                }
+                        } else {
+                                $scope.error_message = data.error
+                        }
+
+                });
+	}
 	
 	$scope.go = function ( path ) {
                 $location.path( path );
