@@ -13,6 +13,42 @@ router.post('/updateInventory', function(req, res, next) {
     console.log("Called update")
 })
 
+router.post('/checkout', function(req, res, next){
+	var con = mysql.createConnection({
+                host: "localhost",
+                user: "root",
+                password: "",
+                database: "cse305"
+        });
+	console.log(req.body)
+	// insert customer order
+	var customerID = req.body.user.ID
+	var currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+	var row = {OrderStatus: 'Processing', DatePlaced: currentDate, EmployeeID: 1, CustomerID: customerID}
+        utils.insertRow('CustOrder', row)
+	// insert payment info
+	var paymentType = req.body.payment.type
+	var cardNumber = req.body.payment.cardNumber
+	var expirationDate = req.body.payment.expirationDate
+	var billingAddress = req.body.payment.billingAddress
+	var cvv = req.body.payment.cvv
+	var user = req.body.user.ID
+	var row = {PaymentType: paymentType, CardNumber: cardNumber, ExpirationDate: expirationDate, BillingAddress: billingAddress, CVV: cvv, User: user}
+	utils.insertRow('PaymentInformation', row)
+	// insert shipping info
+	// delete current shopping cart
+	con.connect(function(err) {
+  		if (err) throw err;
+  		var sql = "DELETE FROM ShoppingCart WHERE CustomerID = " + + mysql.escape(req.body.user.ID);
+  		con.query(sql, function (err, result) {
+    			if (err) throw err;
+    			console.log("Number of records deleted: " + result.affectedRows);
+  		});
+	});
+	return res.send({status: 'OK'})	
+	
+})
+
 router.post('/displayShoppingCart', function(req, res, next){
 	var con = mysql.createConnection({
 		host: "localhost",

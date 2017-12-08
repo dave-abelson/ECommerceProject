@@ -5,4 +5,4 @@
 <p>{{item.Name}}     ${{item.price}}     {{item.ItemQuantity}}</p>
 </div>
 <p>Total: ${{totalPrice | number : 2}}</p>
-<button type="button" class="btn btn-primary">Checkout</button>
+<button type="button" class="btn btn-primary" ng-click="go('/checkout')">Checkout</button>

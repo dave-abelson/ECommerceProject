@@ -1,6 +1,7 @@
 var app = angular.module('ECApp', ['ngRoute', 'ngResource']).run(function($rootScope, $http) {
 	$rootScope.authenticated = false;
 	$rootScope.current_user = {};
+	$rootScope.totalPrice = 0
 
 	$rootScope.logout = function(){
     		$http.get('auth/logout');
@@ -27,6 +28,10 @@ app.config(function($routeProvider, $locationProvider){
 		.when('/shoppingCart',{
 			templateUrl: 'shoppingCart.html',
 			controller: 'shopController'
+		})
+		.when('/checkout',{
+			templateUrl: 'checkout.html',
+			controller: 'checkoutController'
 		});
 	$locationProvider.html5Mode(true);
 });
@@ -61,18 +66,39 @@ app.controller('mainController', function($scope, $http, $rootScope, $location){
 	
 });	
 
+app.controller('checkoutController', function($scope, $http, $rootScope, $location, $timeout){
+	$scope.error_message = '';
+        $scope.shoppingCart = []
+	$scope.payment = {firstName: '', lastName: '', email: '', type: '', cardNumber: '', cvv: '', expirationDate: '', billingAddress: ''}	
+	$scope.shipping = {type: '', address: ''}
+
+	$scope.checkout = function(){
+		$http.post('/api/checkout', {user: $rootScope.current_user, payment: $scope.payment, shipping: $scope.shipping, totalPrice: $rootScope.totalPrice}).success(function(data){
+			if(data.status == 'OK'){
+				console.log('Checkout Complete!')
+				$timeout(function(){
+                                        window.alert("Checkout Complete!");
+                                });
+				$location.path('/');			
+			} else {
+				$scope.error_message = data.error
+			}	
+		})
+	}
+});
+
 app.controller('shopController', function($scope, $http, $rootScope, $location){
 	$scope.error_message = '';
 	$scope.shoppingCart = []
 	$scope.quantityList = []
-	$scope.totalPrice = 0
 	var result = []
 	$scope.displayShoppingCart = function(){
+		$rootScope.totalPrice = 0
 		$http.post('/api/displayShoppingCart', {user: $rootScope.current_user}).success(function(data){
 			if(data.status == 'OK'){
 				console.log('Displayed Shopping Cart Items')		
 				for(var i=0; i < data.result.length; i++){
-					$scope.totalPrice += data.result[i].price * data.result[i].ItemQuantity
+					$rootScope.totalPrice += data.result[i].price * data.result[i].ItemQuantity
 				}
 				$scope.shoppingCart = data.result
 			} else {
@@ -81,6 +107,10 @@ app.controller('shopController', function($scope, $http, $rootScope, $location){
 		});
 	}
 	
+	$scope.go = function ( path ) {
+                $location.path( path );
+        };
+
 	$scope.displayShoppingCart()
 });
 

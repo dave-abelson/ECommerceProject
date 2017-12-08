@@ -1,0 +1,22 @@
+<form class="form-auth" ng-submit="checkout()">
+        <h2>Payment Information</h2>
+	<input type="text" ng-model="payment.firstName" placeholder="First Name" class="form-control"><br>
+	<input type="text" ng-model="payment.lastName" placeholder="Last Name" class="form-control"><br>
+	<input type="email" ng-model="payment.email" placeholder="Email Address" class="form-control"><br>
+        <input type="text" ng-model="payment.type" placeholder="Payment Type" class="form-control"><br>
+        <input type="number" ng-model="payment.cardNumber" placeholder="Card Number" class="form-control"><br>
+	<input type="number" ng-model="payment.cvv" placeholder="CVV" class="form-control"><br>
+        <input type="date" ng-model="payment.expirationDate" placeholder="Expiration Date" class="form-control"><br>
+        <input type="text" ng-model="payment.billingAddress" placeholder="Billing Address" class="form-control"><br>
+
+	<br>
+	<h2>Shipping Information</h2>
+        <input type="text" ng-model="shipping.type" placeholder="Shipping Type" class="form-control"><br>
+        <input type="text" ng-model="shipping.address" placeholder="Shipping Address" class="form-control"><br>
+	<br>
+	<h2>Total Price</h2>
+	<p>{{totalPrice | number: 2}} + Shipping Fee: {{totalPrice * .15 | number: 2}} + Tax: {{totalPrice * .08875 | number: 2}} </p>
+	<p>{{totalPrice + totalPrice * .15 + totalPrice* .08875 | number: 2}}</p>
+        <input type="submit" value="Place your order" class="btn btn-primary" />
+</form>
+
