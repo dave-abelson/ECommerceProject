@@ -15,8 +15,8 @@
         <input type="text" ng-model="shipping.address" placeholder="Shipping Address" class="form-control"><br>
 	<br>
 	<h2>Total Price</h2>
-	<p>{{totalPrice | number: 2}} + Shipping Fee: {{totalPrice * .15 | number: 2}} + Tax: {{totalPrice * .08875 | number: 2}} </p>
-	<p>{{totalPrice + totalPrice * .15 + totalPrice* .08875 | number: 2}}</p>
+	<p>${{totalPrice | number: 2}} + Shipping Fee: ${{totalPrice * .15 | number: 2}} + Tax: ${{totalPrice * .08875 | number: 2}} </p>
+	<p>${{totalPrice + totalPrice * .15 + totalPrice* .08875 | number: 2}}</p>
         <input type="submit" value="Place your order" class="btn btn-primary" />
 </form>
 
