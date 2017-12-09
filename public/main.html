@@ -7,7 +7,6 @@
 
 <p ng-show="authenticated">NAME     Price     Category</p>
 <div ng-repeat="item in itemList">
-<p>{{item.Name}}     ${{item.Price}}     {{item.Category}}     <button type="button">Write Review</button>     <button type="button">Read Reviews</button>     <button type="button" ng-click="addToShoppingCart(item)">Add to Shopping Cart</button></p>
 <p>{{item.Name}}     {{item.Price}}     {{item.Category}}     
 	<form class="form-group" ng-submit="writeReview(item)">
 		<input type="text" ng-model="itemReview.review" placeholder="write your review here!" class="form-control"><br> 
