@@ -28,10 +28,17 @@ app.config(function($routeProvider, $locationProvider){
 		.when('/shoppingCart',{
 			templateUrl: 'shoppingCart.html',
 			controller: 'shopController'
+<<<<<<< Updated upstream
 		})
 		.when('/checkout',{
 			templateUrl: 'checkout.html',
 			controller: 'checkoutController'
+=======
+				})
+		.when('/writeReview',{
+			templateUrl: 'main.html',
+			controller: 'mainController'
+>>>>>>> Stashed changes
 		});
 	$locationProvider.html5Mode(true);
 });
@@ -39,9 +46,9 @@ app.config(function($routeProvider, $locationProvider){
 app.controller('mainController', function($scope, $http, $rootScope, $location){
 	$scope.error_message = '';
 	$scope.item = {id: '', name: '', price: '', category: '', quantity: ''};
-        $scope.itemQuery = {query: ''};
+    $scope.itemQuery = {query: ''};
 	$scope.itemList = [];	
-
+	$scope.itemReview = {review: ''};
 	
 	$scope.itemSearch = function(){
                 $http.post('/api/itemSearch', $scope.itemQuery).success(function(data){
@@ -62,8 +69,16 @@ app.controller('mainController', function($scope, $http, $rootScope, $location){
 				$scope.error_message = data.error
 			}
 		});	
+	};	
+	$scope.writeReview = function(item){
+		$http.post('/api/writeReview', {itemReview: $scope.itemReview, user: $rootScope.current_user, item: item}).success(function(data){
+			if(data.status == 'OK'){
+				console.log('Review added for ' + $scope.item)
+			} else {
+				$scope.error_message = data.error
+			}
+		})
 	};
-	
 });	
 
 app.controller('checkoutController', function($scope, $http, $rootScope, $location, $timeout){

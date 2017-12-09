@@ -53,7 +53,7 @@ router.post('/displayShoppingCart', function(req, res, next){
 	var con = mysql.createConnection({
 		host: "localhost",
 		user: "root",
-		password: "",
+		password: "Mishtalaughalot123",
 		database: "cse305"
 	});
 	console.log(req.body.user.ID)
@@ -183,6 +183,18 @@ router.post('/itemSearch', function(req, res, next){
                 	return res.send({status: 'OK', result: result})
                 });
         }
+});
+
+router.post('/writeReview', function(req, res, next){
+    console.log(req.body)
+    var text = req.body.itemReview.review
+    var itemID = req.body.item.ID
+    var customerID = req.body.user.ID
+    var results
+        var row = {Text: text, ItemID: itemID, CustomerID: customerID}
+        console.log(row)
+        utils.insertRow('Review', row)
+        return res.send({status: 'OK', user: row})
 });
 
 module.exports = router;
