@@ -28,17 +28,14 @@ app.config(function($routeProvider, $locationProvider){
 		.when('/shoppingCart',{
 			templateUrl: 'shoppingCart.html',
 			controller: 'shopController'
-<<<<<<< Updated upstream
 		})
 		.when('/checkout',{
 			templateUrl: 'checkout.html',
 			controller: 'checkoutController'
-=======
 				})
 		.when('/writeReview',{
 			templateUrl: 'main.html',
 			controller: 'mainController'
->>>>>>> Stashed changes
 		});
 	$locationProvider.html5Mode(true);
 });

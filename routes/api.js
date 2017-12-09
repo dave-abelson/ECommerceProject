@@ -53,7 +53,7 @@ router.post('/displayShoppingCart', function(req, res, next){
 	var con = mysql.createConnection({
 		host: "localhost",
 		user: "root",
-		password: "Mishtalaughalot123",
+		password: "",
 		database: "cse305"
 	});
 	console.log(req.body.user.ID)
